@@ -14,10 +14,10 @@ var options = {
   var client = mqtt.connect(url, options);
 
   client.on("connect", function () {
-    var humidity = Math.floor(Math.random() * 20).toString();
+    var air = Math.floor(Math.random() * 100).toString();
 
-    client.publish("iot/sensors/humidity", humidity, function () {
+    client.publish("iot/sensors/air", air, function () {
       client.end();
-      console.log("Sent " + humidity);
+      console.log("Sent " + air);
     });
   });
