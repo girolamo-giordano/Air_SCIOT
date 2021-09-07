@@ -1,0 +1,22 @@
+metadata:
+  name: sendrandomair
+  labels:
+    nuclio.io/project-name: 7847d1e2-bc3e-4a81-9eaf-48eff1ee26a8
+spec:
+  handler: "main:handler"
+  runtime: nodejs
+  resources: {}
+  image: "nuclio/processor-sendrandomair:latest"
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPU: 75
+  build:
+    functionSourceCode: dmFyIG1xdHQgPSByZXF1aXJlKCJtcXR0Iik7DQp2YXIgdXJsID0gcmVxdWlyZSgidXJsIik7DQoNCnZhciBtcXR0X3VybCA9IHVybC5wYXJzZSgibXF0dDovL2d1ZXN0Omd1ZXN0QDE5Mi4xNjguMTc4Ljc4OjE4ODMiKTsNCnZhciBhdXRoID0gKG1xdHRfdXJsLmF1dGggfHwgIjoiKS5zcGxpdCgiOiIpOw0KdmFyIHVybCA9ICJtcXR0Oi8vIiArIG1xdHRfdXJsLmhvc3Q7DQp2YXIgb3B0aW9ucyA9IHsNCiAgcG9ydDogbXF0dF91cmwucG9ydCwNCiAgY2xpZW50SWQ6ICJtcXR0anNfIiArIE1hdGgucmFuZG9tKCkudG9TdHJpbmcoMTYpLnN1YnN0cigyLCA4KSwNCiAgdXNlcm5hbWU6IGF1dGhbMF0sDQogIHBhc3N3b3JkOiBhdXRoWzFdLA0KfTsNCg0KZXhwb3J0cy5oYW5kbGVyID0gZnVuY3Rpb24gKGNvbnRleHQsIGV2ZW50KSB7DQogIHZhciBjbGllbnQgPSBtcXR0LmNvbm5lY3QodXJsLCBvcHRpb25zKTsNCg0KICBjbGllbnQub24oImNvbm5lY3QiLCBmdW5jdGlvbiAoKSB7DQogICAgdmFyIGFpciA9IE1hdGguZmxvb3IoTWF0aC5yYW5kb20oKSAqIDEwMCkudG9TdHJpbmcoKTsNCg0KICAgIGNsaWVudC5wdWJsaXNoKCJpb3Qvc2Vuc29ycy9haXIiLCBhaXIsIGZ1bmN0aW9uICgpIHsNCiAgICAgIGNsaWVudC5lbmQoKTsNCiAgICAgIGNvbnRleHQuY2FsbGJhY2soIlNlbnQgIiArIGFpcik7DQogICAgfSk7DQogIH0pOw0KfTsNCg==
+    commands:
+      - 'npm install mqtt'
+    runtimeAttributes:
+      repositories: []
+    codeEntryType: sourceCode
+  platform: {}
+  readinessTimeoutSeconds: 60
+  version: 1
