@@ -1,8 +1,9 @@
 const {Telegraf} = require('telegraf');
 var amqp = require('amqplib');
+require("dotenv").config({ path: ".env" });
 
 
-const bot = new Telegraf('1909078102:AAETq2VL8mGxsRcq7Y1ILGZDC2tXvj7Fbe4');
+const bot = new Telegraf(`${process.env.BOT_TOKEN}`);
 
 
 
@@ -18,7 +19,6 @@ bot.start((ctx) =>
 )
 
 bot.command('status', (ctx) => {
-    // Explicit usage
     if(activated)
         ctx.reply("Il purificatore è attivo");
     else
@@ -39,7 +39,6 @@ bot.action('on', (ctx)=>{
 })
 
   bot.command('on', (ctx) => {
-    // Explicit usage
     if(activated)
         ctx.reply("Il purificatore è già attivo");
     else
@@ -53,7 +52,6 @@ bot.action('on', (ctx)=>{
   })
 
   bot.command('off', (ctx) => {
-    // Explicit usage
     if(activated)
     {
         ctx.reply("Il purificatore è stato spento");
@@ -66,7 +64,7 @@ bot.action('on', (ctx)=>{
   })
 
 
-amqp.connect('amqp://guest:guest@192.168.178.78:5672').then(function(conn) {
+amqp.connect(`amqp://guest:guest@${process.env.IP}`).then(function(conn) {
 process.once('SIGINT', function() { conn.close(); });
 return conn.createChannel().then(function(ch) {
 
@@ -88,14 +86,10 @@ return conn.createChannel().then(function(ch) {
             },
           }
         if(!activated)
-          bot.telegram.sendMessage(id_user, "Qualità dell'aria: "+ msg.content.toString(), options)
+          bot.telegram.sendMessage(id_user, "Qualità dell'aria: "+ msg.content.toString(), options);
         else
           bot.telegram.sendMessage(id_user, "Qualità dell'aria: "+ msg.content.toString() + ", ma il purificatore d'aria è già acceso");
     }, {noAck: true});
-    });
-
-    return ok.then(function(_consumeOk) {
-    console.log(' [*] Waiting for messages. To exit press CTRL+C');
     });
 });
 }).catch(console.warn);
@@ -103,13 +97,17 @@ return conn.createChannel().then(function(ch) {
 
 function onPurifier(msg){
     var q = 'iot/sensors/airpur';
-    amqp.connect('amqp://guest:guest@192.168.178.78:5672').then(function(conn) {
+    var qlog = 'iot/logs'
+    amqp.connect(`amqp://guest:guest@${process.env.IP}`).then(function(conn) {
     return conn.createChannel().then(function(ch) {
         var ok = ch.assertQueue(q, {durable: false});
         return ok.then(function(_qok) {
           ch.sendToQueue(q, Buffer.from(msg),{persistent:true});
-          console.log(" [x] Sent '%s'", msg);
-          return ch.close();  
+          if(activated == false)
+            ch.sendToQueue(qlog,Buffer.from("off"));
+          else
+            ch.sendToQueue(qlog,Buffer.from("on"))
+          //return ch.close();  
         });
     }).finally(function() {
         setTimeout(function() {
@@ -117,9 +115,8 @@ function onPurifier(msg){
           }, 500);
     });
     }).catch(console.warn);
-}
+
     
-
-
+}
 
 bot.launch()
