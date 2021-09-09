@@ -29,7 +29,7 @@ The value is an integer between 0 to 100 and indicate the percentage of air qual
 - **.env**: file containing settings for javascript scripts
 ## Getting started
 
- > NB: it's required Node.js and Docker to run.
+ > **NB: it's required Node.js and Docker to run.**
 
 From two different terminals start the docker to run RabbitMQ and Nuclio with these following commands:
 
@@ -64,8 +64,7 @@ From two different terminals start the docker to run RabbitMQ and Nuclio with th
   - Open again .env file and insert your IP address instead of **'INSERT_YOUR_IP'** in the field **IP**.
   - Install requirements:
    ```sh
-    npm install amqplib
-    npm install dotenv
+    npm install
    ```
   - Open three terminals and type on the first:
   ```sh
