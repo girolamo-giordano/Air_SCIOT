@@ -12,27 +12,26 @@ var activated=false;
 
 bot.start((ctx) => 
     {
-        console.log(ctx.chat.id);
         id_user=ctx.chat.id;
-        ctx.reply("Benvenuto "+ctx.from.username + " se vuoi ricevere aggiornamenti riguardanti la qualità dell'aria non chiudere il bot");
+        ctx.reply("Welcome, if you want to receive updates regarding the air quality do not close the bot");
     }
 )
 
 bot.command('status', (ctx) => {
     if(activated)
-        ctx.reply("Il purificatore è attivo");
+        ctx.reply("The air purifier is active");
     else
-        ctx.reply("Il purificatore è spento");
+        ctx.reply("The air purifier is turned off");
   })
 
 bot.action('on', (ctx)=>{
 
     if(activated)
-        ctx.reply("Il purificatore è già attivo");
+        ctx.reply("The air purifier is already active");
     else
     {
         ctx.deleteMessage();
-        ctx.reply("Il purificatore è stato acceso");
+        ctx.reply("The air purifier has been turned on");
         onPurifier("1");
         activated=true;
     }
@@ -40,11 +39,11 @@ bot.action('on', (ctx)=>{
 
   bot.command('on', (ctx) => {
     if(activated)
-        ctx.reply("Il purificatore è già attivo");
+        ctx.reply("The air purifier is already active");
     else
     {
 
-        ctx.reply("Il purificatore è stato acceso");
+        ctx.reply("The air purifier has been turned on");
         onPurifier("1");
         activated=true;
     }
@@ -54,12 +53,12 @@ bot.action('on', (ctx)=>{
   bot.command('off', (ctx) => {
     if(activated)
     {
-        ctx.reply("Il purificatore è stato spento");
+        ctx.reply("The air purifier has been turned off");
         onPurifier("0");
         activated=false;
     }
     else
-        ctx.reply("Il purificatore è già spento");
+        ctx.reply("The air purifier is already off");
         
   })
 
@@ -68,9 +67,9 @@ amqp.connect(`amqp://guest:guest@${process.env.IP}`).then(function(conn) {
 process.once('SIGINT', function() { conn.close(); });
 return conn.createChannel().then(function(ch) {
 
-    var ok = ch.assertQueue('iot/sensors/alarm', {durable: false});
+    var chaq = ch.assertQueue('iot/sensors/alarm', {durable: false});
 
-    ok = ok.then(function(_qok) {
+    chaq = chaq.then(function(_qok) {
     return ch.consume('iot/sensors/alarm', function(msg) {
         console.log(" [x] Received '%s'", msg.content.toString());
         const options = {
@@ -78,7 +77,7 @@ return conn.createChannel().then(function(ch) {
               inline_keyboard: [
                 [
                   {
-                    text: "Accendere il purificatore d'aria",
+                    text: "Turn on the air purifier",
                     callback_data: 'on',
                   },
                 ],
@@ -86,9 +85,9 @@ return conn.createChannel().then(function(ch) {
             },
           }
         if(!activated)
-          bot.telegram.sendMessage(id_user, "Qualità dell'aria: "+ msg.content.toString(), options);
+          bot.telegram.sendMessage(id_user, "Air quality: "+ msg.content.toString(), options);
         else
-          bot.telegram.sendMessage(id_user, "Qualità dell'aria: "+ msg.content.toString() + ", ma il purificatore d'aria è già acceso");
+          bot.telegram.sendMessage(id_user, "Air quality: "+ msg.content.toString() + ", but the air purifier is already on");
     }, {noAck: true});
     });
 });
@@ -100,19 +99,15 @@ function onPurifier(msg){
     var qlog = 'iot/logs'
     amqp.connect(`amqp://guest:guest@${process.env.IP}`).then(function(conn) {
     return conn.createChannel().then(function(ch) {
-        var ok = ch.assertQueue(q, {durable: false});
-        return ok.then(function(_qok) {
+        var chaq = ch.assertQueue(q, {durable: false});
+        return chaq.then(function(_qok) {
           ch.sendToQueue(q, Buffer.from(msg),{persistent:true});
           if(activated == false)
             ch.sendToQueue(qlog,Buffer.from("off"));
           else
             ch.sendToQueue(qlog,Buffer.from("on"))
-          //return ch.close();  
-        });
-    }).finally(function() {
-        setTimeout(function() {
-            conn.close();
-          }, 500);
+          return ch.close();
+        });   
     });
     }).catch(console.warn);
 
