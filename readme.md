@@ -84,11 +84,6 @@ From two different terminals start the docker to run RabbitMQ and Nuclio with th
 
 After all this steps, you can use the **sendrandomair** function on Nuclio or **MQTT client** from your smartphone. If the value is < 50, you will be notified on the bot and asked to make a decision.
 
-## Demo
-
-
-https://user-images.githubusercontent.com/56109364/132731147-0ff91588-aef9-472a-8122-f838dd7d9059.mp4
-
 
 
   
