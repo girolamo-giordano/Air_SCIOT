@@ -47,7 +47,7 @@ From two different terminals start the docker to run RabbitMQ and Nuclio with th
 
 - **Update and deploy functions**:
  1. Type '**localhost:8070**' on your browser to open the homepage of Nuclio;
-2.  Create new project and call it **PurAir**;
+2.  Create new project and call it **PUR_AIR**;
   3. Press '**Create function**', '**Import**' and upload the two functions that are in the **yaml_functions** folder;
   4. In both, **change the already present IP with your IP**; also in the tab regarding the trigger
   5. Press **'Deploy'**.
