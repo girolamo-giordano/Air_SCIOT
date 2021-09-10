@@ -26,6 +26,8 @@ Docker is an open platform for developing, shipping, and running applications al
  - **Amqplib:** amqplib allows you to connect, send and consume messages from MQTT queues.
  - **dotenv**: dotenv is a zero-dependency module that loads environment variables from a .env file 
 
+----------------------------------------------------------------------------------------------------------------------------
+
 ## Architecture
 
 To simulate the sensor data of the air purifier, we can use two tools:
@@ -40,57 +42,55 @@ This function process and check its value. If the value is < 50 it sent the valu
 
 At this point in the Telegram bot the message in the <strong>"iot/sensors/alarm"</strong> is intercepted and the message is sent to the user. The user can choose to start purificator air, and if it's do this, a message that represent the status of the purificator air will go to the RabbitMQ queue <strong>"iot/sensors/purair"</strong>. From this queue is possible to get the message that inform the status of purificator air. 
 
-
-
 ![Architecture](https://github.com/girolamo-giordano/telegrambot/blob/main/img/iot_diagram.png?raw=true)
-
+----------------------------------------------------------------------------------------------------------------------------
 ## Installation
 - **First of all we need to run RabbitMQ and Nuclio**:
- 1. Open two terminals, and on the first terminal type:
+  - Open two terminals, to run RabbitMQ using docker type:
 
-  ```sh
-  docker run -p 9000:15672  -p 1883:1883 -p 5672:5672  cyrilix/rabbitmq-mqtt
-  ```
-2. On the second terminal type:
+    ```sh
+    docker run -p 9000:15672  -p 1883:1883 -p 5672:5672  cyrilix/rabbitmq-mqtt
+    ```
+  - On the second terminal, to run Nuclio using Docker type:
 
   ```sh
   docker run -p 8070:8070 -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp nuclio/dashboard:stable-amd64
   ```
-
+  
 - **Update and deploy functions**:
- 1. Type '**localhost:8070**' on your browser to open the homepage of Nuclio;
-2.  Create new project and call it **PURAIR**;
-  3. Press '**Create function**', '**Import**' and upload the two functions that are in the **yaml_functions** folder;
-  4. In both, **change the already present IP with your IP**; also in the tab regarding the trigger
-  5. Press **'Deploy'**.
+
+  - Browse to [Nuclio Dashboard](http://localhost:8070) to open the homepage of Nuclio.
+  - Create new project and call it **PURAIR**.
+  - Press '**Create function**', '**Import**' and upload the two functions that are in the **yaml_functions** folder.
+  - In both, **change the already present IP with your IP**; also in the tab regarding the trigger.
+  - Press **'Deploy'**.
 
 - **Create personal Telegram Bot**:
+   - Open Telegram and search for [BotFather](https://t.me/BotFather).
+   - Press **start** and type **/newbot**.
+   - Follow the instructions gived by BotFather and give it a name and an unique id.
+   - Copy and paste the **Token** that BotFather gave you in the **BOT_TOKEN** in [env](src/.env) file;
 
-  - Open Telegram and search for [BotFather](https://t.me/BotFather).
-  - Press **start** and type **/newbot**.
-  - Give it a **name** and a **unique id**, follow the instructions gived by BotFather.
-  - Copy and paste the **Token** that BotFather gave you in the **BOT_TOKEN** in [env](src/.env) file;
-
-- **Install all dependencies, start Telegram bot's server, AirStatus client and Logger**
+- **Install all dependencies, start Telegram bot's server, AirStatus client and Logger**:
 
   - Open again .env file and insert your IP address instead of **'INSERT_YOUR_IP'** in the field **IP**.
   - Install requirements:
    ```sh
     npm install
    ```
-  - Open three terminals and type on the first:
+    - Open three terminals, to run the bot.js using Node.js type:
   ```sh
     node bot.js
    ```
-  - on the second:
+    - on the second, to run the client that tracks the status of the air purifier type:
   ```sh
     node status_air.js
    ```
-  - on the last one:
+     - on the last one, to run the logger client type:
    ```sh
     node logger.js
    ```
-- **Now we can use the Telegram client**
+- **Now we can use the Telegram client**:
   - Open Telegram
   - Run bot using **/start**
 
