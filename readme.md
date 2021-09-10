@@ -51,11 +51,11 @@ At this point in the Telegram bot the message in the <strong>"iot/sensors/alarm"
     ```sh
     docker run -p 9000:15672  -p 1883:1883 -p 5672:5672  cyrilix/rabbitmq-mqtt
     ```
-  - On the second terminal, to run Nuclio using Docker type:
+  - On the second terminal, to run Nuclio using docker type:
 
-  ```sh
-  docker run -p 8070:8070 -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp nuclio/dashboard:stable-amd64
-  ```
+    ```sh
+    docker run -p 8070:8070 -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp nuclio/dashboard:stable-amd64
+    ```
   
 - **Update and deploy functions**:
 
@@ -63,6 +63,9 @@ At this point in the Telegram bot the message in the <strong>"iot/sensors/alarm"
   - Create new project and call it **PURAIR**.
   - Press '**Create function**', '**Import**' and upload the two functions that are in the **yaml_functions** folder.
   - In both, **change the already present IP with your IP**; also in the tab regarding the trigger.
+     ```js
+      connect("amqp://guest:guest@INSERT_YOUR_IP:5672")
+     ```
   - Press **'Deploy'**.
 
 - **Create personal Telegram Bot**:
@@ -87,9 +90,9 @@ At this point in the Telegram bot the message in the <strong>"iot/sensors/alarm"
     node status_air.js
    ```
      - on the last one, to run the logger client type:
-   ```sh
-    node logger.js
-   ```
+    ```sh
+     node logger.js
+    ```
 - **Now we can use the Telegram client**:
   - Open Telegram
   - Run bot using **/start**
