@@ -73,7 +73,7 @@ At this point in the Telegram bot the message in the <strong>"iot/sensors/alarm"
 
 - **Install all dependencies, start Telegram bot's server, AirStatus client and Logger**:
 
-  - Open again .env file and insert your IP address instead of **'INSERT_YOUR_IP'** in the field **IP**.
+  - Open .env file and insert your IP address instead of **'INSERT_YOUR_IP'** in the field **IP**.
   - Install requirements:
    ```sh
     npm install
