@@ -29,7 +29,7 @@ The value is an integer between 0 to 100 and indicate the percentage of air qual
 - **.env**: file containing settings for javascript scripts
 ## Getting started
 
- > **NB: it's required Node.js and Docker to run.**
+ > **NB: It's required Node.js and Docker to run.**
 
 From two different terminals start the docker to run RabbitMQ and Nuclio with these following commands:
 
@@ -57,7 +57,7 @@ From two different terminals start the docker to run RabbitMQ and Nuclio with th
   - Open Telegram and search for [BotFather](https://t.me/BotFather).
   - Press **start** and type **/newbot**.
   - Give it a **name** and a **unique id**, follow the instructions gived by BotFather.
-  - Copy and paste the **Token** that BotFather gave you in the **BOT_TOKEN** in [.env](.env) file;
+  - Copy and paste the **Token** that BotFather gave you in the **BOT_TOKEN** in [env](src/.env) file;
 
 - **Install all dependencies, start Telegram bot's server, AirStatus client and Logger**
 
